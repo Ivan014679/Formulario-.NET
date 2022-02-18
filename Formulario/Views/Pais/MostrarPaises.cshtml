@@ -1,0 +1,108 @@
+﻿@model Formulario.Models.PaisModel
+@{
+    ViewBag.Title = "Lista de países";
+}
+
+<h2>Pa&iacute;ses</h2>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>C&oacute;digo</th>
+            <th>Nombre</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Lista)
+        {
+            <tr>
+                <td>@Html.DisplayFor(u => item.Codigo)</td>
+                <td>@Html.DisplayFor(u => item.Nombre)</td>
+                <td>
+                    @using (Html.BeginForm("ModificarPais", "Pais", FormMethod.Post))
+                    {<button type="submit" name="codigo" value="@item.Codigo" class="btn">Actualizar</button>}
+                </td>
+                <td>
+                    <button type="button" id="eliminar" name="eliminar" value="@item.Codigo" onclick="confirmacion('@item.Codigo')" class="btn">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button type="button" class="btn" onclick="location.href='Index'">Nuevo pa&iacute;s</button>
+<br /><br />
+
+<div id="confirmacion" style="padding: 20px; background-color: #ff9800; color: white; margin-bottom: 15px; display: none;">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    ¿Est&aacute; seguro que desea eliminar este pa&iacute;s?
+    @using (Html.BeginForm("EliminarPais", "Pais", FormMethod.Post))
+    {
+        @Html.Hidden("codigo");
+        <button type="submit" name="codigo" class="btn btn-primary">Si</button>
+        <button type="reset" onclick="ocultar()" class="btn btn-danger">No</button>
+    }
+</div>
+@{
+    if (string.IsNullOrEmpty(ViewBag.Deleted))
+    {
+        <div id="eliminacion" style="padding: 20px; background-color: #f44336; color: white; margin-bottom: 15px;">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <strong>ERROR</strong>
+            <br />
+            Primero borre los usuarios asociados a ese pa&iacute;s para continuar.
+            <br />
+            <button type="button" onclick="ocultar2()" class="btn">Aceptar</button>
+        </div>
+    }
+    else if (((string)ViewBag.Deleted).Contains("Exito"))
+    {
+        <div id="eliminacion" style="padding: 20px; background-color: #4CAF50; color: white; margin-bottom: 15px;">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            El pa&iacute;s ha sido eliminado exitosamente.
+            <br />
+            <button type="button" onclick="ocultar2()" class="btn">Aceptar</button>
+        </div>
+    }
+    if (!string.IsNullOrEmpty(ViewBag.Update))
+    {
+        <div id="actualizacion" style="padding: 20px; background-color: #4CAF50; color: white; margin-bottom: 15px;">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            El pa&iacute;s ha sido actualizado exitosamente.
+            <br />
+            <button type="button" onclick="ocultar3()" class="btn">Aceptar</button>
+        </div>
+    }
+    if (!string.IsNullOrEmpty(ViewBag.Ingreso))
+    {
+        <div id="ingreso" style="padding: 20px; background-color: #4CAF50; color: white; margin-bottom: 15px;">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            El ingreso del pa&iacute;s fue exitoso.
+            <br />
+            <button type="button" onclick="ocultar4()" class="btn">Aceptar</button>
+        </div>
+    }
+}
+
+<script>
+    function confirmacion(codigo) {
+        document.getElementById("confirmacion").style.display = "block";
+        $('#codigo').val(codigo);
+    }
+
+    function ocultar() {
+        document.getElementById("confirmacion").style.display = "none";
+    }
+
+    function ocultar2() {
+        document.getElementById("eliminacion").style.display = "none";
+    }
+
+    function ocultar3() {
+        document.getElementById("actualizacion").style.display = "none";
+    }
+
+    function ocultar4() {
+        document.getElementById("ingreso").style.display = "none";
+    }
+</script>

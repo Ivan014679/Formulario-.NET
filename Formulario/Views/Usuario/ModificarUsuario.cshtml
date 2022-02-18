@@ -1,0 +1,49 @@
+﻿@model Formulario.Models.UsuarioModel
+@{
+    ViewBag.Title = "Modificar usuario";
+}
+
+<h2>Actualizar usuario</h2>
+
+@using (Html.BeginForm("GuardarCambios", "Usuario", FormMethod.Post))
+{
+    @Html.HiddenFor(x => x.Id)
+    <div class="form-group">
+        @Html.LabelFor(n => n.Nombre)
+        @Html.TextBoxFor(n => n.Nombre, new { @class = "form-control", @placeholder = "Ingrese un nuevo nombre" })
+        @Html.ValidationMessageFor(n => n.Nombre, "", new { @class = "form-text text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(e => e.Email)
+        @Html.TextBoxFor(e => e.Email, new { @class = "form-control", @placeholder = "Ingrese un nuevo email" })
+        @Html.ValidationMessageFor(e => e.Email, "", new { @class = "form-text text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(c => c.Contrasena)
+        @Html.TextBoxFor(c => c.Contrasena, new { @class = "form-control", @placeholder = "Ingrese su contraseña", @type = "password" })
+        @Html.ValidationMessageFor(c => c.Contrasena, "", new { @class = "form-text text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Pais)
+        @Html.DropDownListFor(p => p.Pais, (IEnumerable<SelectListItem>)ViewBag.paises, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Pais, "", new { @class = "form-text text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(g => g.Genero)<br />
+        @{
+            var generos = (IEnumerable<SelectListItem>)ViewBag.generos;
+            foreach (var item in generos)
+            {
+                item.Text = item.Text + ": ";
+                @Html.DisplayFor(g => item.Text)
+                @Html.RadioButtonFor(g => g.Genero, item.Value)
+                <br />
+            }
+        }
+        @Html.ValidationMessageFor(g => g.Genero, "", new { @class = "form-text text-danger" })
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-sucess">Actualizar</button>
+    </div>
+}

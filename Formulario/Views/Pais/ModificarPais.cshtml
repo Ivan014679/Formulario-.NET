@@ -1,0 +1,25 @@
+﻿@model Formulario.Models.PaisModel
+@{
+    ViewBag.Title = "Modificar país";
+}
+
+<h2>Actualizar pa&iacute;s</h2>
+
+@using (Html.BeginForm("GuardarCambios", "Pais", FormMethod.Post))
+{
+    @Html.Hidden("precodigo", Model.Codigo)
+    <div class="form-group">
+        @Html.LabelFor(np => np.Nombre)
+        @Html.TextBoxFor(np => np.Nombre, new { @class = "form-control", @id = "postcode", @placeholder = "Ingrese un nuevo nombre al país" })
+        @Html.ValidationMessageFor(np => np.Nombre, "", new { @class = "form-text text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(cp => cp.Codigo)
+        @Html.TextBoxFor(cp => cp.Codigo, new { @class = "form-control", @placeholder = "Ingrese un nuevo código al país" })
+        @Html.ValidationMessageFor(cp => cp.Codigo, "", new { @class = "form-text text-danger" })
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-sucess">Actualizar</button>
+    </div>
+}

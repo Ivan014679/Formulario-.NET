@@ -1,0 +1,101 @@
+﻿@model Formulario.Models.UsuarioModel
+@{
+    ViewBag.Title = "Lista de usuarios";
+}
+
+<h2>Usuarios</h2>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>País</th>
+            <th>G&eacute;nero</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Lista)
+        {
+            <tr>
+                <td>@Html.DisplayFor(u => item.Nombre)</td>
+                <td>@Html.DisplayFor(u => item.Email)</td>
+                <td>@Html.DisplayFor(u => item.Pais)</td>
+                <td>@Html.DisplayFor(u => item.Genero)</td>
+                <td>
+                    @using (Html.BeginForm("ModificarUsuario", "Usuario", FormMethod.Post))
+                    {<button type="submit" name="id" value="@item.Id" class="btn">Actualizar</button>}
+                </td>
+                <td>
+                    <button type="button" id="eliminar" name="eliminar" value="@item.Id" onclick="confirmacion(@item.Id)" class="btn">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button type="button" class="btn" onclick="location.href='Index'">Nuevo usuario</button>
+<br /><br />
+
+<div id="confirmacion" style="padding: 20px; background-color: #ff9800; color: white; margin-bottom: 15px; display: none;">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    ¿Est&aacute; seguro que desea eliminar este usuario?
+    @using (Html.BeginForm("EliminarUsuario", "Usuario", FormMethod.Post))
+    {
+        @Html.Hidden("id");
+        <button type="submit" name="id" class="btn btn-primary">Si</button>
+        <button type="reset" onclick="ocultar()" class="btn btn-danger">No</button>
+    }
+</div>
+
+@{
+    if (!string.IsNullOrEmpty(ViewBag.Deleted))
+    {
+        <div id="eliminacion" style="padding: 20px; background-color: #4CAF50; color: white; margin-bottom: 15px;">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            El usuario ha sido eliminado exitosamente.
+            <br />
+            <button type="button" onclick="ocultar2()" class="btn">Aceptar</button>
+        </div>
+    }
+    if (!string.IsNullOrEmpty(ViewBag.Update))
+    {
+        <div id="actualizacion" style="padding: 20px; background-color: #4CAF50; color: white; margin-bottom: 15px;">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            El usuario ha sido actualizado exitosamente.
+            <br />
+            <button type="button" onclick="ocultar3()" class="btn">Aceptar</button>
+        </div>
+    }
+    if (!string.IsNullOrEmpty(ViewBag.Registro))
+    {
+        <div id="registro" style="padding: 20px; background-color: #2196F3; color: white; margin-bottom: 15px;">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            Gracias por registrarte con nosotros.
+            <br />
+            <button type="button" onclick="ocultar4()" class="btn">Aceptar</button>
+        </div>
+    }
+}
+
+<script>
+    function confirmacion(id) {
+        document.getElementById("confirmacion").style.display = "block";
+        $('#id').val(id);
+    }
+
+    function ocultar() {
+        document.getElementById("confirmacion").style.display = "none";
+    }
+
+    function ocultar2() {
+        document.getElementById("eliminacion").style.display = "none";
+    }
+
+    function ocultar3() {
+        document.getElementById("actualizacion").style.display = "none";
+    }
+    function ocultar4() {
+        document.getElementById("registro").style.display = "none";
+    }
+</script>

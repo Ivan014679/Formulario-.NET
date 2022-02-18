@@ -1,0 +1,107 @@
+﻿@model Formulario.Models.GeneroModel
+@{
+    ViewBag.Title = "Lista de géneros";
+}
+
+<h2>G&eacute;neros</h2>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>C&oacute;digo</th>
+            <th>Nombre</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Lista)
+        {
+            <tr>
+                <td>@Html.DisplayFor(u => item.Id_Genero)</td>
+                <td>@Html.DisplayFor(u => item.Nombre)</td>
+                <td>
+                    @using (Html.BeginForm("ModificarGenero", "Genero", FormMethod.Post))
+                    {<button type="submit" name="id" value="@item.Id_Genero" class="btn">Actualizar</button>}
+                </td>
+                <td>
+                    <button type="button" id="eliminar" name="eliminar" value="@item.Id_Genero" onclick="confirmacion('@item.Id_Genero')" class="btn">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button type="button" class="btn" onclick="location.href='Index'">Nuevo g&eacute;nero</button>
+<br /><br />
+
+<div id="confirmacion" style="padding: 20px; background-color: #ff9800; color: white; margin-bottom: 15px; display: none;">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    ¿Est&aacute; seguro que desea eliminar este g&eacute;nero?
+    @using (Html.BeginForm("EliminarGenero", "Genero", FormMethod.Post))
+    {
+        @Html.Hidden("id");
+        <button type="submit" name="id" class="btn btn-primary">Si</button>
+        <button type="reset" onclick="ocultar()" class="btn btn-danger">No</button>
+    }
+</div>
+@{
+    if (string.IsNullOrEmpty(ViewBag.Deleted))
+    {
+        <div id="eliminacion" style="padding: 20px; background-color: #f44336; color: white; margin-bottom: 15px;">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <strong>ERROR</strong>
+            <br />
+            Primero borre los usuarios asociados a ese g&eacute;nero para continuar.
+            <br />
+            <button type="button" onclick="ocultar2()" class="btn">Aceptar</button>
+        </div>
+    }
+    else if (((string)ViewBag.Deleted).Contains("Exito"))
+    {
+        <div id="eliminacion" style="padding: 20px; background-color: #4CAF50; color: white; margin-bottom: 15px;">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            El g&eacute;nero ha sido eliminado exitosamente.
+            <br />
+            <button type="button" onclick="ocultar2()" class="btn">Aceptar</button>
+        </div>
+    }
+    if (!string.IsNullOrEmpty(ViewBag.Update))
+    {
+        <div id="actualizacion" style="padding: 20px; background-color: #4CAF50; color: white; margin-bottom: 15px;">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            El g&eacute;nero ha sido actualizado exitosamente.
+            <br />
+            <button type="button" onclick="ocultar3()" class="btn">Aceptar</button>
+        </div>
+    }
+    if (!string.IsNullOrEmpty(ViewBag.Ingreso))
+    {
+        <div id="ingreso" style="padding: 20px; background-color: #4CAF50; color: white; margin-bottom: 15px;">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            El ingreso del g&eacute;nero fue exitoso.
+            <br />
+            <button type="button" onclick="ocultar4()" class="btn">Aceptar</button>
+        </div>
+    }
+}
+
+<script>
+    function confirmacion(codigo) {
+        document.getElementById("confirmacion").style.display = "block";
+        $('#id').val(codigo);
+    }
+
+    function ocultar() {
+        document.getElementById("confirmacion").style.display = "none";
+    }
+
+    function ocultar2() {
+        document.getElementById("eliminacion").style.display = "none";
+    }
+
+    function ocultar3() {
+        document.getElementById("actualizacion").style.display = "none";
+    }
+    function ocultar4() {
+        document.getElementById("ingreso").style.display = "none";
+    }
+</script>
